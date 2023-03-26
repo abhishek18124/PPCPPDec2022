@@ -1,0 +1,39 @@
+// n <= 10
+
+#include<iostream>
+
+using namespace std;
+
+void tossCoin(int n, char* out, int i, int j) {
+
+	// base case
+	if(i == n) { // or j == n
+		out[j] = '\0';
+		cout << out  << endl;
+		return;
+	}
+
+	// recursive case
+
+	// toss the ith coin
+
+	// 1. it shows head i.e. 'H'
+	out[j] = 'H';
+	tossCoin(n, out, i+1, j+1);
+
+	// 2. it shows tail i.e. 'T'
+	out[j] = 'T';
+	tossCoin(n, out, i+1, j+1);
+
+}
+
+int main() {
+
+	int n = 3;
+
+	char out[10];
+
+	tossCoin(n, out, 0, 0);
+
+	return 0;
+}
