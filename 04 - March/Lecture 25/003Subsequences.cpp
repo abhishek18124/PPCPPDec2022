@@ -46,7 +46,9 @@ void generateSubseqeunces(char* inp, char* out, int i, int j) {
 
 	// 1. include inp[i] in   out[]
 	out[j] = inp[i];
-	generateSubseqeunces(inp, out, i+1, j+1);
+	j++;
+	generateSubseqeunces(inp, out, i+1, j);
+	j--; // back-tracking step
 
 	// 2. exclude inp[i] from out[]
 	generateSubseqeunces(inp, out, i+1, j);
