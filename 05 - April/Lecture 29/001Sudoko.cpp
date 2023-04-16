@@ -16,7 +16,31 @@ Assume 'n' is a perfect square, hence there are 'n' subgrids of size '√n x √
 
 using namespace std;
 
-void solveSudoku(int grid[][9], int n, int i, int j) {
+bool canPlaceDigit(int grid[][9], int n, int i, int j, int d) {
+
+	for(int k=0; k<n; k++) {
+		if(grid[i][k] == d || grid[k][j] == d) {
+			return false;
+		}
+	}
+
+	int rn = sqrt(n);
+	int sx = i/rn * rn;
+	int sy = j/rn * rn;
+
+	for(int ii=sx; ii<sx+rn; ii++) {
+		for(int jj=sy; jj<sy+rn; jj++) {
+			if(grid[ii][jj] == d) {
+				return false;
+			}
+		}
+	}
+
+	return true;
+
+}
+
+void solve(int grid[][9], int n, int i, int j) {
 
 	// base case 
 	if(i == n) {
@@ -36,14 +60,26 @@ void solveSudoku(int grid[][9], int n, int i, int j) {
 	if(j == n) {
 		// digits have been assigned to all the cells in the ith row -
 		// move to the next row, and start filling from its 0th cell
+		solve(grid, n, i+1, 0);
+		return;
 	}
 
 	if(grid[i][j] != 0) {
 		// (i, j)th cell is already assigned a digit - 
 		// move to the next cell at the (i, j+1)th idx
+		solve(grid, n, i, j+1);
+		return;
 	}
 
 	// assign a valid digit 'd' to the (i, j)th cell where 1<=d<=9
+
+	for(int d=1; d<=9; d++) {
+		if(canPlaceDigit(grid, n, i, j, d)) {
+			grid[i][j] = d;
+			solve(grid, n, i, j+1);
+			grid[i][j] = 0; // back-tracking step
+		}
+	}
 
 }
 
@@ -60,7 +96,15 @@ int main() {
 			         {0, 0, 0, 0, 0, 0, 0, 7, 4}, 
 			         {0, 0, 5, 2, 0, 6, 3, 0, 0}};
 
-	// todo ...
+	solve(grid, n, 0, 0);
+
+	// for(int i=0; i<n; i++) {
+	// 	for(int j=0; j<n; j++) {
+	// 		cout << grid[i][j] << " ";
+	// 	}
+	// 	cout << endl;
+	// }
+	// cout << endl;
 	
 	return 0;
 }
